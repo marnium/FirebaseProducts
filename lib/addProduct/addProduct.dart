@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-
-import '../DatabaseOperation/databaseData.dart';
-
 import 'FormAdd.dart';
 
 // ignore: must_be_immutable
 class AddProduct extends StatelessWidget {
-  DatabaseData db;
   Function callbackInsert;
   AddProduct({
     Key key,
-    this.db,
     this.callbackInsert,
   });
   @override
@@ -25,7 +20,7 @@ class AddProduct extends StatelessWidget {
         body: SafeArea(
           child:
               ListView(padding: EdgeInsets.symmetric(vertical: 8.0), children: [
-            FormAdd(db: db, callbackInsert: callbackInsert),
+            FormAdd(callbackInsert: callbackInsert),
           ]),
         ));
   }

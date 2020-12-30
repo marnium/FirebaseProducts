@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
-import '../DatabaseOperation/Task.dart';
-import '../DatabaseOperation/databaseData.dart';
 
 int resultId;
 
 // ignore: must_be_immutable
 class FormAdd extends StatefulWidget {
-  final DatabaseData db;
   Function callbackInsert;
-  FormAdd({Key key, this.db, this.callbackInsert});
+  FormAdd({Key key, this.callbackInsert});
   @override
   ContentForm createState() => ContentForm();
 }
 
 Widget _boxTextField(String placeholder, TextEditingController controllerText,
-        TextInputType typeData, DatabaseData db, int maxlines) =>
+        TextInputType typeData, int maxlines) =>
     TextFormField(
       controller: controllerText,
       validator: (value) {
@@ -23,7 +20,6 @@ Widget _boxTextField(String placeholder, TextEditingController controllerText,
             return "Rellene el campo";
           } else {
             switch (placeholder) {
-              case 'Clave':
               case 'Cantidad':
                 var valueData = int.tryParse(value);
                 return (value.length > 18)
@@ -58,7 +54,6 @@ class ContentForm extends State<FormAdd> {
   String titleAvatar = "";
 
   Map<String, TextEditingController> controllerForm = {
-    "id": TextEditingController(),
     "name": TextEditingController(),
     "price": TextEditingController(),
     "detailarticle": TextEditingController(),
@@ -75,71 +70,14 @@ class ContentForm extends State<FormAdd> {
   }
 
   _insertDB() {
-    var task;
-    Future<int> getResultId =
-        widget.db.queryId(int.tryParse(controllerForm['id'].text));
-    getResultId.then((value) => {
-          if (value != null)
-            {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return SimpleDialog(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: 15.0, right: 15.0, top: 15.0),
-                          child: Column(
-                            children: [
-                              Center(
-                                child: Text(
-                                  "Clave repetida, introduzca una clave diferente por favor",
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  RaisedButton(
-                                    color: Colors.blue[400],
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                        15.0,
-                                      ),
-                                    ),
-                                    child: Text(
-                                      'Ok',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    onPressed: () => {
-                                      Navigator.pop(context),
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    );
-                  }),
-            }
-          else
-            {
-              task = Task(
-                  int.tryParse(controllerForm['id'].text),
-                  controllerForm['name'].text,
-                  double.tryParse(controllerForm['price'].text),
-                  controllerForm['detailarticle'].text,
-                  int.tryParse(controllerForm['amount'].text)),
-              widget.callbackInsert(task),
-              Navigator.pop(context),
-            }
-        });
+    Map<String, dynamic> data = {
+      'name': controllerForm['name'].text,
+      'price': double.tryParse(controllerForm['price'].text),
+      'detail': controllerForm['detailarticle'].text,
+      'amount': int.tryParse(controllerForm['amount'].text)
+    };
+    widget.callbackInsert(data);
+    Navigator.pop(context);
   }
 
   @override
@@ -162,8 +100,6 @@ class ContentForm extends State<FormAdd> {
                         style: TextStyle(fontSize: 40, color: Colors.black),
                       ),
                     )),
-                _boxTextField("Clave", controllerForm['id'],
-                    TextInputType.number, widget.db, 1),
                 SizedBox(
                   height: 10,
                 ),
@@ -190,22 +126,18 @@ class ContentForm extends State<FormAdd> {
                 SizedBox(
                   height: 10,
                 ),
-                _boxTextField("Precio", controllerForm['price'],
-                    TextInputType.number, widget.db, 1),
+                _boxTextField(
+                    "Precio", controllerForm['price'], TextInputType.number, 1),
                 SizedBox(
                   height: 10,
                 ),
-                _boxTextField(
-                    "Detalle del producto",
-                    controllerForm['detailarticle'],
-                    TextInputType.text,
-                    widget.db,
-                    5),
+                _boxTextField("Detalle del producto",
+                    controllerForm['detailarticle'], TextInputType.text, 5),
                 SizedBox(
                   height: 10,
                 ),
                 _boxTextField("Cantidad", controllerForm['amount'],
-                    TextInputType.number, widget.db, 1),
+                    TextInputType.number, 1),
                 SizedBox(
                   height: 10,
                 ),

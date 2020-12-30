@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
-import '../DatabaseOperation/databaseData.dart';
-import '../updateProduct/updateProduct.dart';
+import 'package:productos/updateProduct/updateProduct.dart';
 
 // ignore: must_be_immutable
 class CreateComponent extends StatefulWidget {
   final Map<String, dynamic> dataComponent;
-  final DatabaseData db;
   Function callbackDelete;
   Function callbackUpdate;
   CreateComponent(
-      {Key key,
-      this.dataComponent,
-      this.db,
-      this.callbackDelete,
-      this.callbackUpdate})
+      {Key key, this.dataComponent, this.callbackDelete, this.callbackUpdate})
       : super(key: key);
   @override
   State<StatefulWidget> createState() => _CreateComponentState();
@@ -44,7 +38,6 @@ class _CreateComponentState extends State<CreateComponent> {
       ),
       pageBuilder: (context, animation, secondaryAnimation) => UpdateProduct(
           dataMainPage: widget.dataComponent,
-          db: widget.db,
           callbackUpdate: widget.callbackUpdate),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var tween = Tween<Offset>(begin: Offset(0.0, 1.0), end: Offset.zero)
@@ -190,7 +183,7 @@ class _CreateComponentState extends State<CreateComponent> {
                                 FontWeight.normal, 17),
                             dividerColumnText(),
                             _customText(
-                                " Detalle: ${widget.dataComponent['detailarticle']}",
+                                " Detalle: ${widget.dataComponent['detail']}",
                                 FontWeight.normal,
                                 17),
                             dividerColumnText(),

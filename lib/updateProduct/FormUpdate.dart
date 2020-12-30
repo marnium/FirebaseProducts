@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import '../DatabaseOperation/Task.dart';
-import '../DatabaseOperation/databaseData.dart';
+import 'package:productos/models/Product.dart';
 
 // ignore: must_be_immutable
-class FormAdd extends StatefulWidget {
+class FormUpdate extends StatefulWidget {
   final Map<String, dynamic> dataArticle;
-  final DatabaseData db;
   Function callbackUpdate;
-  FormAdd({Key key, this.dataArticle, this.db, this.callbackUpdate})
+  FormUpdate({Key key, this.dataArticle, this.callbackUpdate})
       : super(key: key);
   @override
   ContentForm createState() => ContentForm();
@@ -23,7 +21,6 @@ Widget _boxTextField(String placeholder, TextEditingController controllerText,
             return "Rellene el campo";
           } else {
             switch (placeholder) {
-              case 'Clave':
               case 'Cantidad':
                 var valueData = int.tryParse(value);
                 return (value.length > 18)
@@ -54,7 +51,7 @@ Widget _boxTextField(String placeholder, TextEditingController controllerText,
       enabled: isEnabled,
     );
 
-class ContentForm extends State<FormAdd> {
+class ContentForm extends State<FormUpdate> {
   final _formKey = GlobalKey<FormState>();
 
   String titleAvatar = "";
@@ -62,7 +59,7 @@ class ContentForm extends State<FormAdd> {
     "id": TextEditingController(),
     "name": TextEditingController(),
     "price": TextEditingController(),
-    "detailarticle": TextEditingController(),
+    "detail": TextEditingController(),
     "amount": TextEditingController()
   };
   void initState() {
@@ -71,8 +68,7 @@ class ContentForm extends State<FormAdd> {
     controllerForm['name'].text = "${widget.dataArticle['name']}";
     controllerForm['id']..text = "${widget.dataArticle['id']}";
     controllerForm['price']..text = "${widget.dataArticle['price']}";
-    controllerForm['detailarticle']
-      ..text = "${widget.dataArticle['detailarticle']}";
+    controllerForm['detail']..text = "${widget.dataArticle['detail']}";
     controllerForm['amount']..text = "${widget.dataArticle['amount']}";
     controllerForm['name'].addListener(() {
       final text = controllerForm['name'].text.toLowerCase();
@@ -96,13 +92,13 @@ class ContentForm extends State<FormAdd> {
   }
 
   void _updateProduct(BuildContext context) {
-    var taskUpdate = Task(
-        widget.dataArticle['id'],
-        (controllerForm['name'].text).trim(),
-        double.tryParse(controllerForm['price'].text),
-        controllerForm['detailarticle'].text,
-        int.tryParse(controllerForm['amount'].text));
-    widget.callbackUpdate(taskUpdate);
+    var product = Product(
+        id: controllerForm['id'].text,
+        name: controllerForm['name'].text.trim(),
+        price: double.tryParse(controllerForm['price'].text),
+        detail: controllerForm['detail'].text,
+        amount: int.tryParse(controllerForm['amount'].text));
+    widget.callbackUpdate(product);
     Navigator.pop(context);
   }
 
@@ -126,8 +122,8 @@ class ContentForm extends State<FormAdd> {
                         style: TextStyle(fontSize: 40, color: Colors.black),
                       ),
                     )),
-                _boxTextField("Clave", controllerForm['id'],
-                    TextInputType.number, false, 1),
+                _boxTextField("Clave", controllerForm['id'], TextInputType.text,
+                    false, 1),
                 SizedBox(
                   height: 10,
                 ),
@@ -161,12 +157,8 @@ class ContentForm extends State<FormAdd> {
                 SizedBox(
                   height: 10,
                 ),
-                _boxTextField(
-                    "Detalle del producto",
-                    controllerForm['detailarticle'],
-                    TextInputType.text,
-                    true,
-                    5),
+                _boxTextField("Detalle del producto", controllerForm['detail'],
+                    TextInputType.text, true, 5),
                 SizedBox(
                   height: 10,
                 ),
@@ -193,8 +185,11 @@ class ContentForm extends State<FormAdd> {
                   onPressed: () => {
                     if (_formKey.currentState.validate())
                       {
+                        print('actualizando...'),
                         _updateProduct(context),
                       }
+                    else
+                      {print('error en la actualización')}
                   },
                 ),
                 RaisedButton(
