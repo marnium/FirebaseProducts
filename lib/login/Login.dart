@@ -85,28 +85,7 @@ class _LoginState extends State<Login> {
   }
 
   _signInWithEmailAndPassword() async {
-    /*try {
-      _auth
-          .signInWithEmailAndPassword(
-              email: _controllerEmail.text.trim(),
-              password: _controllerPassword.text.trim())
-          .then(
-        (_) {
-          Navigator.of(context)
-              .pushReplacement(MaterialPageRoute(builder: (context) => Home()));
-        },
-      );
-    } catch (e) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return SimpleDialog(
-            children: [Text(e.message)],
-          );
-        },
-      );
-    }
-  }*/
+    /*
     try {
       final User user = (await _auth.signInWithEmailAndPassword(
         email: _controllerEmail.text,
@@ -129,6 +108,25 @@ class _LoginState extends State<Login> {
           );
         },
       );
+    }*/
+    try {
+      User user = (await _auth.signInWithEmailAndPassword(
+              email: _controllerEmail.text.trim(),
+              password: _controllerPassword.text.trim()))
+          .user;
+      print('Sucess');
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (_) => Home(
+                user: user,
+              )));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No se encontro una cuenta con este email');
+      } else if (e.code == 'wrong-password') {
+        print('La contraseña es incorrecta');
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }

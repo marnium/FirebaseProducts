@@ -93,7 +93,7 @@ class _RegisterState extends State<Register> {
   }
 
   void _registerAccount() async {
-    final User user = (await _auth.createUserWithEmailAndPassword(
+    /*final User user = (await _auth.createUserWithEmailAndPassword(
       email: _controllerEmail.text,
       password: _controllerPassword.text,
     ))
@@ -117,6 +117,29 @@ class _RegisterState extends State<Register> {
           );
         },
       );
+    }*/
+    try {
+      User user = (await _auth.createUserWithEmailAndPassword(
+              email: _controllerEmail.text.trim(),
+              password: _controllerPassword.text.trim()))
+          .user;
+
+      await user.updateProfile(displayName: _controllerFullName.text.trim());
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => Home(
+                user: _auth.currentUser,
+              )));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print(
+            'La contraseña es debil. Escriba una mezclando letras y numeros.');
+      } else if (e.code == 'email-already-in-use') {
+        print('Ya existe una cuenta para este emial. Escriba otro emial');
+      } else if (e.code == 'invalid-email') {
+        print('El email no es valido');
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }
