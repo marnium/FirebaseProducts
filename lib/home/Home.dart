@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:productos/debouncer/Debouncer.dart';
 import 'package:productos/home/CreateComponent.dart';
 import 'package:productos/addProduct/addProduct.dart';
+import 'package:productos/login/Login.dart';
 import 'package:productos/models/Product.dart';
 import 'package:productos/services/FirestoreService.dart';
 
@@ -15,12 +15,8 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-// ignore: camel_case_types
 class _HomeState extends State<Home> {
   FirestoreService firestoreService = FirestoreService();
-  //bool _isSearching = false;
-  //String valNew = "";
-  //TextEditingController ContentSearch = TextEditingController();
 
   Route _handleNavigationPressed() {
     return PageRouteBuilder(
@@ -42,79 +38,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-  /*Widget _getAppBarNotSearching(String title) {
-    return AppBar(
-      title: Text(title),
-      backgroundColor: Colors.purple,
-      iconTheme: IconThemeData(color: Colors.white),
-      actions: <Widget>[
-        IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              _startSearching();
-            }),
-      ],
-    );
-  }
-
-  Widget _getAppBarSearching() {
-    final debouncer = Debouncer();
-    return AppBar(
-      automaticallyImplyLeading: false,
-      backgroundColor: Colors.purple,
-      iconTheme: IconThemeData(color: Colors.white),
-      leading: IconButton(
-          icon: Icon(Icons.clear),
-          onPressed: () {
-            _cancelSearching();
-          }),
-      title: Padding(
-        padding: const EdgeInsets.only(bottom: 0, right: 10),
-        child: TextField(
-          controller: ContentSearch,
-          onChanged: (String val) {
-            if (_isSearching) {
-              debouncer.run(() {
-                setState(() {
-                  valNew = val;
-                });
-              });
-            }
-          },
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20.0,
-          ),
-          cursorColor: Colors.white,
-          autofocus: true,
-          textAlign: TextAlign.center,
-          decoration: InputDecoration(
-            focusColor: Colors.white,
-            focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.white)),
-            enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.white)),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _startSearching() {
-    setState(() {
-      _isSearching = true;
-      ContentSearch.clear();
-    });
-  }
-
-  void _cancelSearching() {
-    setState(() {
-      _isSearching = false;
-      valNew = "";
-      ContentSearch.clear();
-    });
-  }*/
-
   void callbackDelete(String id) {
     setState(() {
       firestoreService.deleteProduct(id);
@@ -124,58 +47,47 @@ class _HomeState extends State<Home> {
   void callbackInsert(Map<String, dynamic> data) {
     setState(() {
       firestoreService.addProduct(data);
-      /*if (_isSearching) {
-        valNew = "";
-        _isSearching = false;
-      }*/
     });
   }
 
   void callbackUpdate(Product data) {
     setState(() {
       firestoreService.updateProduct(data);
-      /*if (_isSearching) {
-        valNew = "";
-        _isSearching = false;
-      }*/
     });
   }
-
-  /*_showList(BuildContext context) {
-    return FutureBuilder(
-      future: db.getSpecifiedList(valNew),
-      initialData: List<Product>(),
-      builder: (BuildContext context, AsyncSnapshot<List<Product>> snapshot) {
-        if (snapshot.hasData && snapshot.data.length != 0) {
-          return ListView(
-            padding: EdgeInsets.all(15.0),
-            children: [
-              for (Task task in snapshot.data)
-                CreateComponent(
-                  dataComponent: _convertToMap(
-                      task.id, task.name, task.price, task.detail, task.amount),
-                  db: db,
-                  callbackDelete: callbackDelete,
-                  callbackUpdate: callbackUpdate,
-                ),
-            ],
-          );
-        } else {
-          return (_isSearching)
-              ? Center(child: Text("Sin resultados"))
-              : Center(child: Text("Agregue un producto"));
-        }
-      },
-    );
-  }*/
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.user.displayName),
+        title: Center(
+          child: Text(widget.user.displayName),
+        ),
         actions: [
-          IconButton(icon: Text('Cerrar'), onPressed: () {}),
+          DropdownButton<String>(
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+            ),
+            dropdownColor: Color(0xff18203d),
+            icon: Icon(
+              Icons.more_vert,
+              color: Colors.white,
+            ),
+            items: <String>['Cerrar Sesión']
+                .map<DropdownMenuItem<String>>((e) => DropdownMenuItem<String>(
+                      child: Text(e),
+                      value: e,
+                    ))
+                .toList(),
+            onChanged: (value) {
+              if (value == 'Cerrar Sesión') {
+                FirebaseAuth.instance.signOut().then((value) =>
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => Login())));
+              }
+            },
+          )
         ],
       ),
       body: SafeArea(
@@ -183,24 +95,29 @@ class _HomeState extends State<Home> {
           stream:
               FirebaseFirestore.instance.collection('productos').snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasData && snapshot.data.size != 0) {
-              List<DocumentSnapshot> docs = snapshot.data.docs;
-              return ListView.builder(
-                  itemCount: docs.length,
-                  itemBuilder: (context, index) {
-                    Map<String, dynamic> data = {
-                      'id': docs[index].id,
-                      ...docs[index].data()
-                    };
-                    return CreateComponent(
-                      dataComponent: data,
-                      callbackDelete: callbackDelete,
-                      callbackUpdate: callbackUpdate,
-                    );
-                  });
-            } else {
-              return Center(child: Text('No se encontraron productos'));
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else if (snapshot.hasData) {
+              if (snapshot.data.size != 0) {
+                List<DocumentSnapshot> docs = snapshot.data.docs;
+                return ListView.builder(
+                    itemCount: docs.length,
+                    itemBuilder: (context, index) {
+                      return CreateComponent(
+                        dataComponent: <String, dynamic>{
+                          'id': docs[index].id,
+                          ...docs[index].data()
+                        },
+                        callbackDelete: callbackDelete,
+                        callbackUpdate: callbackUpdate,
+                      );
+                    });
+              }
+              return Center(child: Text('No se han agregado datos.'));
             }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           },
         ),
       ),
