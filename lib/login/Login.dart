@@ -65,6 +65,9 @@ class _LoginState extends State<Login> {
                   minWidth: double.maxFinite,
                   height: 50,
                   color: _logoGreen,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
                   child: isProcessingQuery
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -98,14 +101,17 @@ class _LoginState extends State<Login> {
                   minWidth: double.maxFinite,
                   height: 50,
                   color: Colors.blue,
+                  disabledColor: Colors.blue[400],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
                   child: Text('Crear nueva cuenta',
                       style: TextStyle(color: Colors.white, fontSize: 16)),
                   onPressed: isProcessingQuery
                       ? null
                       : () {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) => Register()));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => Register()));
                         },
                   onLongPress: null,
                 ),

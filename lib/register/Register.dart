@@ -76,6 +76,9 @@ class _RegisterState extends State<Register> {
                     minWidth: double.maxFinite,
                     height: 50,
                     color: _logoGreen,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
                     child: isProcessingQuery
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -151,11 +154,14 @@ class _RegisterState extends State<Register> {
       ))
           .user;
       await user.updateProfile(displayName: _fullNameController.text.trim());
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => Home(
-          user: _auth.currentUser,
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => Home(
+            user: _auth.currentUser,
+          ),
         ),
-      ));
+        (route) => false,
+      );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password')
         _showMessage(

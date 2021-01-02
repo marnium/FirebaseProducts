@@ -70,9 +70,13 @@ class _HomeState extends State<Home> {
               fontSize: 18,
             ),
             dropdownColor: Color(0xff18203d),
+            underline: Container(
+              color: Colors.transparent,
+            ),
             icon: Icon(
               Icons.more_vert,
               color: Colors.white,
+              size: 30,
             ),
             items: <String>['Cerrar Sesión']
                 .map<DropdownMenuItem<String>>((e) => DropdownMenuItem<String>(
@@ -101,6 +105,8 @@ class _HomeState extends State<Home> {
               if (snapshot.data.size != 0) {
                 List<DocumentSnapshot> docs = snapshot.data.docs;
                 return ListView.builder(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
                     itemCount: docs.length,
                     itemBuilder: (context, index) {
                       return CreateComponent(
