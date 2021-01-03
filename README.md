@@ -1,15 +1,6 @@
 # Aplicación móvil "Productos"
 
-Esta aplicación se desarrolló con el propósito de llevar un control de productos. Este permite crear, buscar, actualizar/modificar y eliminar (CRUD) los productos.
-
-### Campos en la aplicación al agregar productos
-
-- Código
-- Nombre
-- Precio
-- Descripción
-- Cantidad
-
+_Esta aplicación móvil se desarrollo con el marco de desarollo Flutter y con las tecnologías de Firebase, todas desarrolladas por Google. La aplicación ofrece un sistema de autenticación de usuarios y además funcionalidades para llevar un control de productos, desde ver en tiempo real las actualizaciones realizadas desde el exterior, hasta realizar actualizaciones/modicaciones y eliminacions de los productos, mismo que se ven reflejados en tiempo real._
 
 ## Comenzando 🚀
 Estas instrucciones te permitirán tener una copia del proyecto en funcionamiento para propósitos de desarrollo y pruebas.
@@ -18,6 +9,9 @@ Estas instrucciones te permitirán tener una copia del proyecto en funcionamient
 * SDK de Flutter 
 * Algún emulador, aunque también se podría depurar en un dispositivo Android físico (opcional)
 * De preferencia un IDE o editor de código para la mejor manipulación del proyecto (Android Studio y Visual Studio Code son los más usados y conocidos)
+* Configurar una cuenta de Firebase.
+    * Crear una base de datos con Firestore.
+    * Habilitar el método de inicio de sesión mediante correo/contraseña  con Authentication.
 
 _**NOTA**: Android Studio provee emuladores de dispositivos Android por lo que su uso seria eficiente_
 
@@ -26,9 +20,14 @@ _**NOTA**: Android Studio provee emuladores de dispositivos Android por lo que s
 * Mediante algún IDE o editor de código abrir el proyecto y ejecutar mediante un emulador o incluso emular mediante un dispositivo físico (modo depuración). Esto para depurar la aplicación, aunque para tener un release incluye más pasos que puedes consultar en la documentación de Flutter
 
 ## Visualización de la aplicación movil en un dispositivo fisico
-![principalAgregar](https://user-images.githubusercontent.com/69527151/101958323-b7517900-3bc8-11eb-8a7b-7c0ed8f01466.PNG)
-![vistaActualizar](https://user-images.githubusercontent.com/69527151/101958395-d6e8a180-3bc8-11eb-839b-913605b1cd6d.PNG)
-![buscarEliminar](https://user-images.githubusercontent.com/69527151/101958399-d94afb80-3bc8-11eb-875d-1590c11c05bc.PNG)
+![login](https://user-images.githubusercontent.com/53574794/103486377-07d08680-4dc3-11eb-8192-5d0498e15e11.png)
+![register](https://user-images.githubusercontent.com/53574794/103486379-099a4a00-4dc3-11eb-95e0-a98c2fb728a5.png)
+![home](https://user-images.githubusercontent.com/53574794/103486376-03a46900-4dc3-11eb-9ff7-af7043772d68.png)
+![add-product](https://user-images.githubusercontent.com/53574794/103486199-afe55000-4dc1-11eb-9b40-7006d8842708.png)
+![fetch-realtime](https://user-images.githubusercontent.com/53574794/103486369-f5eee380-4dc2-11eb-9877-71ddf8410ba9.png)
+![fetch-realtime-2](https://user-images.githubusercontent.com/53574794/103486375-fedfb500-4dc2-11eb-889b-7b210f7c7dbe.png)
+![update-product](https://user-images.githubusercontent.com/53574794/103486381-0b640d80-4dc3-11eb-9862-300af96bdcdf.png)
+![delete-product](https://user-images.githubusercontent.com/53574794/103486366-f0919900-4dc2-11eb-8aa1-86df1894414d.png)
 
 ## Autores ✒️
 - **Pedro Lorenzo Eleomar**
