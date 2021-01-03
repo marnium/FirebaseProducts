@@ -1,6 +1,6 @@
 # Aplicación móvil "Productos"
 
-_Esta aplicación móvil se desarrollo con el marco de desarollo Flutter y con las tecnologías de Firebase, todas desarrolladas por Google. La aplicación ofrece un sistema de autenticación de usuarios y además funcionalidades para llevar un control de productos, desde ver en tiempo real las actualizaciones realizadas desde el exterior, hasta realizar actualizaciones/modicaciones y eliminacions de los productos, mismo que se ven reflejados en tiempo real._
+_Esta aplicación móvil se desarrollo con **Flutter**, un conjunto de herramientas de interfaz de usuario (UI), y con las tecnologías **Cloud Firestore** y **Authentication** de la plataforma **Firebase**, todas desarrolladas por la empresa Google. La aplicación ofrece un sistema de autenticación de usuarios y además funcionalidades para llevar el control de productos, desde ver en tiempo real las actualizaciones realizadas desde el exterior, hasta realizar actualizaciones/modicaciones y eliminacions de los productos, mismo que se ven reflejados en tiempo real._
 
 ## Comenzando 🚀
 Estas instrucciones te permitirán tener una copia del proyecto en funcionamiento para propósitos de desarrollo y pruebas.
